@@ -1,0 +1,10 @@
+{
+  "name": "repeated-work-review",
+  "version": "0.1.0",
+  "description": "A checklist skill that walks an agent through finding and removing repeated work: measure first, compare inputs and outputs per unit of work, fix, re-measure.",
+  "author": { "name": "junovhs" },
+  "homepage": "https://github.com/junovhs/repeated-work-review",
+  "repository": "https://github.com/junovhs/repeated-work-review",
+  "license": "MIT",
+  "keywords": ["performance", "redundancy", "profiling", "skill"]
+}

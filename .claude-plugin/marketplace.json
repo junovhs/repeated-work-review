@@ -1,0 +1,11 @@
+{
+  "name": "repeated-work-review",
+  "owner": { "name": "junovhs" },
+  "plugins": [
+    {
+      "name": "repeated-work-review",
+      "source": "./",
+      "description": "Checklist skill for finding and removing repeated work, with measurement snippets in several languages."
+    }
+  ]
+}
