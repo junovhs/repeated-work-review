@@ -1,0 +1,4 @@
+{
+  "tax_rate": 1.2,
+  "blocked_skus": ["sku3", "sku17", "sku42"]
+}

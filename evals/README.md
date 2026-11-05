@@ -19,6 +19,15 @@ the skill can be compared.
 
 Cases that involve private repositories live in `local/` (git-ignored).
 
+## Case: tiny-pipeline (smoke test, run this first)
+
+A 90-line Python script with four planted repeats and three decoys, in
+`cases/tiny-pipeline/`. It runs in under half a second, so a whole review should
+take minutes. Copy only `app/` somewhere the agent can't see the answer key,
+then ask it to review that folder with the unit of work `python pipeline.py`.
+Score against `cases/tiny-pipeline/answer-key.md`. Run it after every change to
+the skill, before the slow cases.
+
 ## Case: mashu (MashuPack)
 
 Browser TypeScript with a Rust/WASM core. Public:

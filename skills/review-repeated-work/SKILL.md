@@ -1,6 +1,6 @@
 ---
 name: review-repeated-work
-description: Find and remove repeated or wasted work in code — duplicate computation, the same input parsed or derived more than once, identical DOM rebuilds, writes that change nothing, forced reflows, N+1 calls, loop-invariant work, full recomputes when one part changed. Use when asked to look for repeated work, redundant or wasted computation, unnecessary re-renders or re-parsing, or to make code faster by not doing the same job twice. Measures before claiming and re-measures after fixing.
+description: Find and remove repeated or wasted work in code — duplicate computation, the same input parsed or derived more than once, identical DOM rebuilds, writes that change nothing, forced reflows, N+1 calls, loop-invariant work, full recomputes when one part changed. Use when asked to look for repeated work, redundant or wasted computation, unnecessary re-renders or re-parsing, or to make code faster by not doing the same job twice. Starts with a fast pass that reports ranked suspects in about 15 minutes; deeper measurement only when asked.
 ---
 
 # Review for repeated work
@@ -10,7 +10,51 @@ same input, producing the same output, again. Removing it is often the largest
 speedup available, sometimes by orders of magnitude, because the waste tends
 to multiply (per item, per stage, per frame).
 
-The checklist below says **what** to do at each step and why. It does not
+## Start with the fast pass. Always.
+
+The person asked a question and is waiting for an answer. Your first report
+is due in **about 15 minutes**, and it must be at least as fast and as useful as
+an ordinary "look for repeated work" without this skill. Thoroughness that
+costs the person their afternoon is a failure, not rigour.
+
+1. **Find the hot path.** Read the entry point for the work the person named
+   (or the obvious main operation) and follow it to where the time plausibly
+   goes. Use the lenses in steps 7–13 below as a quick mental checklist, not as
+   separate investigations.
+2. **Measure only with what is already at hand**, and only if it takes a few
+   minutes: an existing build or binary, the project's own bench or test
+   command, a timer or counter around one call, stats the program already
+   prints. One run is fine; say it was one run.
+3. **Report.** List the suspects ranked by likely cost, each with the place in
+   the code, what repeats per unit, the number if you have one, and an honest
+   evidence level (*suspect* if you only read it). Then name the one or two
+   measurements that would confirm the top suspects, and how long each would
+   take.
+
+During the fast pass, **do not**, without asking first:
+
+- start a build that takes more than a few minutes, or install or repair a
+  toolchain;
+- push a branch, open a pull request, dispatch CI, or run jobs on another
+  machine;
+- plan repeated runs, medians, or more than one data size;
+- change code.
+
+If something can't be measured quickly (the build is broken here, the unit
+needs a GPU you don't have), don't work around it. Report the suspects as
+suspects and say what measuring would take.
+
+If you are going to exceed about 15 minutes for any reason, stop and give
+the person what you have, then ask.
+
+## The deep pass: only when the person asks for it
+
+After the fast-pass report, the person may ask to confirm findings, to fix
+them, or for a full review. Then work through the checklist below. Tell them
+up front roughly how long it will take and what it will run, and report each
+finding as soon as it is confirmed rather than at the end.
+
+The checklist says **what** to do at each step and why. It does not
 dictate how: use judgement and the tools of the stack in front of you. Short
 examples of the same move in several languages are in
 [references/snippets.md](references/snippets.md), indexed by step number. They
@@ -20,8 +64,8 @@ are there to show the idea, not to be pasted. For browser apps, also read
 Three rules hold throughout:
 
 - **Measure before you claim.** Reading code finds suspects; only a count or a
-  timing makes one a finding. Every finding in the final report carries a
-  number.
+  timing makes one a finding. Label anything unmeasured as a suspect, never
+  as a finding.
 - **Judge per unit of work.** "Ran twice" means nothing until you say twice per
   *what*.
 - **Separate what you saw from what is safe.** Observing a repeat is not proof
